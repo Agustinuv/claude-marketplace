@@ -44,6 +44,8 @@ gets the plugins enabled automatically:
 | Plugin | What it provides |
 |--------|------------------|
 | `dev-workflow` | Skills for the git/PR/review lifecycle: `git-commits`, `pr-description`, `pre-merge-review`, `frontend-handoff` |
+| `marketplace-authoring` | Meta-tooling to extend the marketplace: skills `new-plugin`, `new-skill`, `new-agent`, `new-connector`, `validate-marketplace` + a bundled schema reference |
+| `team-standards` | Injects the team's coding standards & PR conventions into every session (SessionStart hook). Edit `plugins/team-standards/context/team-standards.md` to change the standard |
 
 ## Repository layout
 

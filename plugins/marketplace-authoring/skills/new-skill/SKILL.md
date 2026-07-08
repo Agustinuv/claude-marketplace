@@ -37,8 +37,9 @@ Create a well-formed `skills/<name>/SKILL.md` inside a chosen plugin. Follow
    The `description` is what makes Claude auto-invoke the skill — make it concrete, not vague.
 
 5. **Supporting files (optional):** create `scripts/`, `references/`, or `templates/`
-   subfolders as needed and reference them with `${CLAUDE_PLUGIN_ROOT}/...` (never `../`).
-   Write any code comments/docstrings in English.
+   subfolders as needed and reference them from the SKILL.md with
+   `${CLAUDE_SKILL_DIR}/...` (the skill's own directory; never `../`, never
+   `${CLAUDE_PLUGIN_ROOT}` for skill files). Write code comments/docstrings in English.
 
 6. **Bump** the plugin's `version` in `plugin.json`, then **validate**:
    `claude plugin validate .`.

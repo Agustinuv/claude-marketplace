@@ -76,11 +76,15 @@ allowed-tools: Read, Bash, Grep   # optional; omit to allow all tools
 # My Skill
 
 Step-by-step instructions for Claude. Use `$ARGUMENTS` for user input.
-Reference bundled files with `${CLAUDE_PLUGIN_ROOT}/skills/my-skill/scripts/foo.sh`.
+Reference bundled files with `${CLAUDE_SKILL_DIR}/scripts/foo.sh`.
 ```
 
 - `description` is the single most important field — write it as concrete triggers.
 - Supporting files go in the skill folder (`scripts/`, `references/`, `templates/`).
+- **Reference bundled scripts/files with `${CLAUDE_SKILL_DIR}`** (the skill's own
+  directory, resolved by Claude Code at load time). This is the documented variable for
+  skills and works whether the skill is personal, project-level, or in a plugin. Do NOT
+  use `${CLAUDE_PLUGIN_ROOT}` for skill files — that variable is meant for hooks/MCP configs.
 
 ## agents/<name>.md (subagent)
 
@@ -120,13 +124,15 @@ Transports: `stdio` (default, via `command`/`args`), `http`, `sse`, `websocket`.
 
 - **kebab-case** for all plugin/skill/agent names.
 - Comments & docstrings in **English** (team standard).
-- Inside a plugin, reference bundled files with `${CLAUDE_PLUGIN_ROOT}/…`. Never use
-  paths outside the plugin folder — `../` is blocked for installed plugins.
+- In a skill, reference bundled files with `${CLAUDE_SKILL_DIR}/…`; in hooks/MCP configs
+  use `${CLAUDE_PLUGIN_ROOT}/…`. Never use paths outside the plugin folder — `../` is blocked.
 - Never hard-code secrets. Use `userConfig` + `"sensitive": true` and `${user_config.KEY}`.
 
 ## Variables
 
-- `${CLAUDE_PLUGIN_ROOT}` — the plugin's installed directory.
+- `${CLAUDE_SKILL_DIR}` — a skill's own directory (`<plugin>/skills/<name>/`). Use this
+  in `SKILL.md` to invoke bundled scripts/files. Resolved at skill load time.
+- `${CLAUDE_PLUGIN_ROOT}` — the plugin's installed directory. Use in hooks/MCP configs.
 - `${CLAUDE_PLUGIN_DATA}` — persistent data dir (survives updates).
 - `${CLAUDE_PROJECT_DIR}` — the current project root.
 - `${user_config.KEY}` — a value from the plugin's `userConfig`.

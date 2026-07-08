@@ -24,6 +24,14 @@
       "description": "Meta-tooling to create and modify the marketplace itself: scaffold plugins, skills, subagents, and MCP connectors, then validate before publishing.",
       "category": "development",
       "keywords": ["authoring", "scaffold", "plugin", "mcp", "meta"]
+    },
+    {
+      "name": "team-standards",
+      "source": "./plugins/team-standards",
+      "displayName": "Team Standards",
+      "description": "Injects the team's coding standards, PR conventions, and architecture patterns into every session as persistent context (SessionStart hook).",
+      "category": "development",
+      "keywords": ["standards", "conventions", "clean-code", "context"]
     }
   ]
 }
