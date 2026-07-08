@@ -50,13 +50,41 @@ tipo(contexto): description in english, imperative, no trailing period
 
 ## Architecture & stack conventions
 
-> ⚠️ **TODO — team to define.** These are the team's own conventions (not covered by the
-> Platanus guide). Fill in the real rules below and remove this notice. Our stack:
-> FastAPI / Django · PostgreSQL / Qdrant · Airflow · Next.js / Vue · Docker · RAG.
+Our stack: FastAPI / Django · PostgreSQL / Qdrant · Airflow · Next.js / Vue · Docker · RAG.
+Both backend and frontend frameworks are used depending on the project — apply the rule
+that fits the repo you are in.
 
-- **Backend (FastAPI / Django):** _<layering, auth pattern, ORM vs raw SQL, config, error handling — define>_
-- **Data (PostgreSQL / Qdrant / Airflow):** _<migrations policy, DAG idempotency, embedding/chunking for RAG — define>_
-- **Frontend (Next.js / Vue):** _<component style, state, API-call wrapping, styling system — define>_
+### Backend (FastAPI / Django)
+
+- **Structure**: aim for layered separation (routers/endpoints → services → repositories).
+  In Django-based projects (e.g. Vincula), follow the standard Django app layout
+  (models / views / serializers).
+- **Data access**: **ORM only** (SQLAlchemy / Django ORM). Raw SQL is exceptional — justify
+  it and always parametrize.
+- **Config**: per framework — `pydantic-settings` (FastAPI) or Django settings, both reading
+  from environment variables. Never hard-code config or secrets.
+- **Auth/authz**: varies by project; whatever the pattern, enforce authorization on every
+  endpoint that exposes data.
+- **Error handling**: _(por definir — dirección propuesta:_ excepciones de dominio propias
+  mapeadas por un handler central a respuestas HTTP consistentes; aún no obligatorio).
+
+### Data (PostgreSQL / Qdrant / Airflow)
+
+- **Migrations**: every schema change ships a versioned migration (Alembic / Django ORM).
+  Roll out non-breaking: add column → deploy code → remove deprecated column. Index foreign
+  keys and common filters.
+- **Airflow**: DAGs are idempotent and re-runnable; no hidden state carried between tasks.
+- **RAG**: defined per project — but always record the embedding model and chunking strategy
+  used so ingestion is reproducible.
+
+### Frontend (Next.js / Vue)
+
+- **Components & state**: function components + hooks (React) / Composition API (Vue). Keep
+  state local; reach for Context or a store only when state is genuinely shared. Minimize
+  global state.
+- **Styling**: **Tailwind CSS** as the base styling system.
+- **API calls**: _(por definir — aún sin convención de equipo para consumir el backend)._
+- Integrate backend changes from a `frontend-handoff` brief when one is provided.
 
 ## Security (baseline)
 

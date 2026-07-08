@@ -1,7 +1,7 @@
 {
   "name": "team-standards",
   "displayName": "Team Standards",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Injects the IMFD team's coding standards, PR conventions, and architecture patterns into every session as persistent context, via a SessionStart hook. Edit context/team-standards.md to change the standard.",
   "author": {
     "name": "IMFD",
