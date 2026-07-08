@@ -16,6 +16,15 @@
   tokens, and never log sensitive data.
 - **Change only what the task needs.** Don't refactor unrelated code in the same change.
 
+## Tooling & formatting
+
+Formatting and linting are standardized and enforced via **pre-commit hooks** — run them
+before committing; do not hand-format around the tools.
+
+- **Python**: `ruff` (lint) + `black` (format).
+- **JS / TS**: `eslint` (lint) + `prettier` (format).
+- Do not disable a lint rule inline unless justified with a short comment explaining why.
+
 ## Git & commits
 
 We follow the **Platanus** commit convention — use the `git-commits` skill:
@@ -31,45 +40,29 @@ tipo(contexto): description in english, imperative, no trailing period
 ## Pull Requests
 
 - Write the description with the `pr-description` skill (fixed template: **Context →
-  Changelog → How to test → Screenshots? → Notes?**).
+  Changelog → How to test → Screenshots? → Notes?**), following the Platanus PR format.
+- PR title uses the same `tipo(contexto)` convention as commits.
 - Compare against the merge-base (`base...HEAD`), never a linear diff.
 - Anything the author must fill manually is flagged with `⚠️ COMPLETAR`.
+- **At least 1 approval** is required before merging.
+- Pre-commit checks (lint/format) must pass; CI green before merge.
 - Before requesting merge, run `pre-merge-review` and resolve every 🔴 Bloqueante.
-- PR title follows the same `tipo(contexto)` convention as commits.
 
-## Testing
+## Architecture & stack conventions
 
-- New behavior ships with tests that assert **behavior, not implementation**.
-- Cover edge cases: empty/null, boundaries, error paths, concurrency where relevant.
-- Don't mark a task done on green types alone — exercise the actual flow when it has a
-  runtime surface.
+> ⚠️ **TODO — team to define.** These are the team's own conventions (not covered by the
+> Platanus guide). Fill in the real rules below and remove this notice. Our stack:
+> FastAPI / Django · PostgreSQL / Qdrant · Airflow · Next.js / Vue · Docker · RAG.
 
-## Backend (FastAPI / Django)
-
-- Auth/authorization via dependency injection (FastAPI `Depends`) — not ad-hoc checks.
-- Validate all inputs at the boundary (Pydantic / DRF serializers). Never trust client data.
-- Database access through the ORM; raw SQL only when justified, always parameterized.
-- Watch for N+1 queries; batch and paginate. Index foreign keys and common filters.
-- Config via `pydantic-settings` / env vars; no literals for endpoints/credentials.
-
-## Data / RAG (PostgreSQL · Qdrant · Airflow)
-
-- Schema changes ship a migration; roll out non-breaking (add column → deploy → remove).
-- Airflow DAGs are idempotent and re-runnable; no hidden state between tasks.
-- For RAG: record the embedding model + chunking strategy; keep ingestion reproducible.
-
-## Frontend (Next.js / Vue)
-
-- Function components + hooks (React); Composition API (Vue). No unnecessary state.
-- Wrap API calls with error handling and loading/empty/error states.
-- Keep styling consistent with the project's system (no ad-hoc inline styles).
-- Integrate backend changes from a `frontend-handoff` brief when one is provided.
+- **Backend (FastAPI / Django):** _<layering, auth pattern, ORM vs raw SQL, config, error handling — define>_
+- **Data (PostgreSQL / Qdrant / Airflow):** _<migrations policy, DAG idempotency, embedding/chunking for RAG — define>_
+- **Frontend (Next.js / Vue):** _<component style, state, API-call wrapping, styling system — define>_
 
 ## Security (baseline)
 
-- Validate and sanitize inputs; avoid injection (SQL/command/template).
-- Enforce authz on every endpoint that exposes data.
-- Keep dependencies current; don't introduce a new dependency for something trivial.
+- Validate and sanitize inputs at the boundary; avoid injection (SQL/command/template).
+- Enforce authorization on every endpoint that exposes data.
+- Keep dependencies current; don't add a dependency for something trivial.
 
 ---
 
