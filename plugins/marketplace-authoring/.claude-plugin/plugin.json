@@ -1,0 +1,12 @@
+{
+  "name": "marketplace-authoring",
+  "displayName": "Marketplace Authoring",
+  "version": "0.1.0",
+  "description": "Meta-tooling to create and modify the marketplace itself: scaffold plugins, skills, subagents, and MCP connectors following the team conventions, then validate before publishing.",
+  "author": {
+    "name": "IMFD",
+    "email": "agustin.urrutia@imfd.cl"
+  },
+  "keywords": ["authoring", "scaffold", "plugin", "skill", "mcp", "meta"],
+  "license": "MIT"
+}

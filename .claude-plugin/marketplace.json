@@ -16,6 +16,14 @@
       "description": "Team standard for the git/PR/review lifecycle: commit messages, PR descriptions, pre-merge review, and backend->frontend handoff.",
       "category": "productivity",
       "keywords": ["git", "pr", "code-review", "workflow"]
+    },
+    {
+      "name": "marketplace-authoring",
+      "source": "./plugins/marketplace-authoring",
+      "displayName": "Marketplace Authoring",
+      "description": "Meta-tooling to create and modify the marketplace itself: scaffold plugins, skills, subagents, and MCP connectors, then validate before publishing.",
+      "category": "development",
+      "keywords": ["authoring", "scaffold", "plugin", "mcp", "meta"]
     }
   ]
 }
