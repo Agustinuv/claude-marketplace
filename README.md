@@ -6,13 +6,22 @@ with the same tools and conventions.
 
 ## Install
 
+You can drive this from the TUI (`/plugin …`) or from the shell (`claude plugin …`) —
+both are equivalent.
+
 ```bash
 # 1. Add this marketplace (once per machine)
-/plugin marketplace add imfd/claude-marketplace
+claude plugin marketplace add imfd/claude-marketplace     # from GitHub
+# or, for local development of the marketplace itself:
+claude plugin marketplace add /path/to/claude-marketplace # from a local directory
 
-# 2. Install the plugins you want
-/plugin install dev-workflow@imfd-marketplace
+# 2. Install the plugins you want (marketplace name is "imfd-marketplace")
+claude plugin install dev-workflow@imfd-marketplace
+claude plugin install team-standards@imfd-marketplace
+claude plugin install marketplace-authoring@imfd-marketplace
 ```
+
+Restart your Claude Code session afterwards — plugins (skills, hooks) load at session start.
 
 > Replace `imfd/claude-marketplace` with the real `owner/repo` once this is pushed to GitHub.
 
@@ -39,6 +48,38 @@ gets the plugins enabled automatically:
 - **Manual install / update:** `gh auth login` or an SSH key with access to the repo.
 - **Background auto-update:** set `GITHUB_TOKEN` in your environment.
 
+## Updating
+
+When this repo changes (a new skill, an edited standard, a new plugin):
+
+```bash
+claude plugin marketplace update imfd-marketplace   # pull the latest from the source
+claude plugin update <plugin-name>                  # update a plugin (restart to apply)
+```
+
+When does a change become visible?
+
+- **GitHub source:** `marketplace update` does a `git pull` of the clone. A plugin only
+  counts as a new version when its `plugin.json` `version` is **bumped** (plain commits are
+  not enough) — that's why bumping is required in [CONTRIBUTING.md](./CONTRIBUTING.md). If a
+  plugin omits `version`, every commit SHA counts as a new version.
+- **Local directory source:** the marketplace is referenced in place, so `marketplace update`
+  re-reads your working copy — your edits show up after update + restart. Ideal while
+  developing the marketplace.
+
+Team flow: edit → PR (CI validates) → merge to `main` → everyone runs `marketplace update`
++ `plugin update` and restarts.
+
+## Where it lives on your machine
+
+| What | Location |
+|------|----------|
+| Registered marketplaces | `~/.claude/plugins/known_marketplaces.json` |
+| Installed plugins | `~/.claude/plugins/installed_plugins.json` |
+| Enabled state + known marketplaces | `~/.claude/settings.json` (`enabledPlugins`, `extraKnownMarketplaces`) |
+| GitHub-source content | cloned to `~/.claude/plugins/marketplaces/<name>/` |
+| Local-directory content | referenced in place (your repo path — not copied) |
+
 ## Plugins
 
 | Plugin | What it provides |
@@ -52,19 +93,23 @@ gets the plugins enabled automatically:
 ```
 claude-marketplace/
 ├── .claude-plugin/
-│   └── marketplace.json        # Single source of truth: lists all plugins
+│   └── marketplace.json            # Single source of truth: lists all plugins
 ├── plugins/
-│   └── dev-workflow/
-│       ├── .claude-plugin/
-│       │   └── plugin.json      # Plugin manifest
-│       └── skills/              # Auto-scanned; each skill is <name>/SKILL.md
-│           ├── git-commits/
-│           ├── pr-description/
-│           ├── pre-merge-review/
-│           └── frontend-handoff/
+│   ├── dev-workflow/
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/                 # git-commits, pr-description, pre-merge-review, frontend-handoff
+│   ├── marketplace-authoring/
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── skills/                 # new-plugin, new-skill, new-agent, new-connector, validate-marketplace
+│   │   └── references/             # bundled schema reference
+│   └── team-standards/
+│       ├── .claude-plugin/plugin.json
+│       ├── hooks/hooks.json        # SessionStart -> injects the standard
+│       └── context/team-standards.md
 ├── .github/workflows/
-│   └── validate.yml            # CI: runs `claude plugin validate .` on every PR
-└── CONTRIBUTING.md             # Conventions for adding/updating plugins
+│   └── validate.yml                # CI: runs `claude plugin validate .` on every PR
+├── CONTRIBUTING.md                 # Conventions for adding/updating plugins
+└── README.md
 ```
 
 ## Contributing
