@@ -1,0 +1,21 @@
+{
+  "name": "imfd-marketplace",
+  "owner": {
+    "name": "IMFD",
+    "email": "agustin.urrutia@imfd.cl"
+  },
+  "description": "Private Claude Code marketplace for the IMFD team: shared skills, agents, and connectors that standardize how we develop.",
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "dev-workflow",
+      "source": "./plugins/dev-workflow",
+      "displayName": "Dev Workflow",
+      "description": "Team standard for the git/PR/review lifecycle: commit messages, PR descriptions, pre-merge review, and backend->frontend handoff.",
+      "category": "productivity",
+      "keywords": ["git", "pr", "code-review", "workflow"]
+    }
+  ]
+}

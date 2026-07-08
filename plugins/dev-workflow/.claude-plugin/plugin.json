@@ -1,0 +1,12 @@
+{
+  "name": "dev-workflow",
+  "displayName": "Dev Workflow",
+  "version": "0.1.0",
+  "description": "Team standard for the git/PR/review lifecycle. Bundles skills for commit messages (Platanus standard), PR descriptions, pre-merge review, and backend->frontend handoff.",
+  "author": {
+    "name": "IMFD",
+    "email": "agustin.urrutia@imfd.cl"
+  },
+  "keywords": ["git", "pr", "code-review", "handoff", "workflow"],
+  "license": "MIT"
+}
