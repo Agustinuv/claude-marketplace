@@ -1,7 +1,7 @@
 {
   "name": "dev-workflow",
   "displayName": "Dev Workflow",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Team standard for the git/PR/review lifecycle. Bundles skills for commit messages (Platanus standard), PR descriptions, pre-merge review, and backend->frontend handoff.",
   "author": {
     "name": "IMFD",

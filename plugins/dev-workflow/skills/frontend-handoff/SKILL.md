@@ -1,6 +1,6 @@
 ---
 name: frontend-handoff
-description: Genera, desde el contexto del backend, un brief portable y autoejecutable con las instrucciones que el frontend necesita para integrar un cambio del backend. Úsala SIEMPRE que el usuario haya desarrollado algo en el backend que requiera sincronización con el frontend: un endpoint nuevo para consumir, una capa de seguridad/autenticación agregada, parámetros o campos de respuesta nuevos o modificados en un endpoint existente, un cambio de contrato, o cualquier cambio que el frontend deba reflejar. Frases típicas que la disparan: "creé un endpoint y quiero consumirlo en el front", "genera las instrucciones para el frontend", "esto hay que sincronizarlo con el front", "agregué seguridad a este endpoint", "cambié lo que retorna este endpoint", "handoff al frontend", "qué tiene que cambiar el front por esto".
+description: Genera, desde el contexto del backend, un brief portable y autoejecutable con las instrucciones que el frontend necesita para integrar un cambio del backend. Úsala SIEMPRE que el usuario haya desarrollado algo en el backend que requiera sincronización con el frontend: un endpoint nuevo para consumir, una capa de seguridad/autenticación agregada, parámetros o campos de respuesta nuevos o modificados en un endpoint existente, un cambio de contrato, o cualquier cambio que el frontend deba reflejar. Frases típicas que la disparan: "creé un endpoint y quiero consumirlo en el front", "genera las instrucciones para el frontend", "esto hay que sincronizarlo con el front", "agregué seguridad a este endpoint", "cambié lo que retorna este endpoint", "handoff al frontend", "qué tiene que cambiar el front por esto". Tambien aplica si pide copiar el brief al portapapeles.
 ---
 
 # Frontend Handoff (Backend → Frontend)
@@ -145,8 +145,25 @@ Eres el agente del repositorio de **frontend**. Tu tarea es integrar el cambio d
    (variables de entorno nuevas, regenerar tipos, etc.).
 ````
 
+## Paso 4 — Copiar el brief al portapapeles
+
+Guarda el brief final en un archivo temporal y cópialo con:
+
+```bash
+bash ${CLAUDE_SKILL_DIR}/scripts/copy_to_clipboard.sh <archivo-temporal>
+```
+
+- Si el script confirma éxito (`OK: ...`), avisa brevemente al usuario cómo se copió
+  (ej. "copiado con pbcopy").
+- Si falla (`WARN: ...`), dile explícitamente al usuario que no se pudo copiar
+  automáticamente y por qué (herramienta faltante), para que copie el bloque a mano.
+
+Siempre muestra el brief completo en tu respuesta, aunque la copia haya tenido éxito — así el
+usuario puede previsualizarlo antes de pegarlo en la sesión de frontend.
+
 ## Después de presentar el brief
 
-Tras mostrar el bloque, dile al usuario en una línea: que lo copie y lo pegue en la sesión de frontend
-pidiendo "ejecuta este brief", y que si vuelve con una sección "Cambios requeridos en el backend",
-puede traértela a esta sesión para resolverla.
+Tras mostrar el bloque, dile al usuario en una línea: que ya está en el portapapeles (o que lo copie
+a mano si la copia falló), que lo pegue en la sesión de frontend pidiendo "ejecuta este brief", y que
+si vuelve con una sección "Cambios requeridos en el backend", puede traértela a esta sesión para
+resolverla.
