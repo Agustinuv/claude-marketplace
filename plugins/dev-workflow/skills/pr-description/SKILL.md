@@ -1,6 +1,6 @@
 ---
 name: pr-description
-description: "Genera el markdown para la descripcion de una Pull Request de GitHub, comparando la rama actual con una rama destino (main por defecto). Usa esta skill siempre que el usuario pida generar/armar/redactar la descripcion o el markdown de un PR o MR, pida comparar la rama actual con main (o con otra rama) para preparar un pull request, o pida un resumen de cambios para subir a GitHub. Tambien aplica si menciona 'PR', 'pull request', 'MR', 'merge request', o pide copiar la descripcion del PR al portapapeles."
+description: "Genera el markdown para la descripcion de una Pull Request de GitHub (siempre redactada en ingles), comparando la rama actual con una rama destino (main por defecto). Usa esta skill siempre que el usuario pida generar/armar/redactar la descripcion o el markdown de un PR o MR, pida comparar la rama actual con main (o con otra rama) para preparar un pull request, o pida un resumen de cambios para subir a GitHub. Tambien aplica si menciona 'PR', 'pull request', 'MR', 'merge request', o pide copiar la descripcion del PR al portapapeles."
 ---
 
 # Generador de descripción de PR
@@ -9,6 +9,10 @@ Genera el markdown de la descripción de un Pull Request analizando el diff
 de la rama actual contra una rama destino, siguiendo siempre la misma
 plantilla y dejando claramente marcado todo lo que el usuario deba
 completar a mano.
+
+**El contenido de la descripción se escribe SIEMPRE en inglés** (Context,
+Changelog, How to test, Notes), sin importar el idioma de la conversación.
+Solo los bloques `⚠️ COMPLETAR` mantienen su formato fijo.
 
 ## Plantilla de referencia
 
@@ -27,7 +31,7 @@ cada ítem en negrita con un nombre corto del cambio, seguido del tag
 convención), y luego la descripción en prosa.
 
 ```
-* **DB schema cleanup** (`refactor(db-model)`): descripción del cambio...
+* **DB schema cleanup** (`refactor(db-model)`): description of the change...
 ```
 
 ## Flujo de trabajo
@@ -75,6 +79,9 @@ muestra el error al usuario y pide la aclaración necesaria antes de seguir.
   deuda técnica conocida, TODOs dejados a propósito.
 
 ### 4. Redactar cada sección
+
+Todo el contenido de las secciones se redacta **en inglés**, aunque la
+conversación con el usuario sea en español u otro idioma.
 
 - **Context**: 1–3 frases explicando el porqué. Si no es inferible del
   diff/commits/conversación, no lo inventes — déjalo marcado (ver más abajo).
@@ -155,6 +162,8 @@ antes de pegarlo en GitHub.
 
 ## Reglas duras
 
+- La descripción del PR se escribe SIEMPRE en inglés, sin importar el idioma
+  de la conversación. Los bloques `⚠️ COMPLETAR` conservan su formato fijo.
 - Nunca inventes contenido específico (contexto, pasos de testing,
   credenciales, links a otros repos) que no se pueda inferir del diff, los
   commits, o la conversación — todo eso va marcado con `⚠️ COMPLETAR`.
