@@ -21,7 +21,11 @@
 Formatting and linting are standardized and enforced via **pre-commit hooks** — run them
 before committing; do not hand-format around the tools.
 
-- **Python**: `ruff` (lint) + `black` (format).
+- **Python**: `black` (format). Do not use `ruff`.
+- **Python data models**: prefer **pydantic `BaseModel`** over `dataclasses` for structured
+  data — validation, serialization, and settings come for free and match our stack
+  (FastAPI, `pydantic-settings`). Use a plain `dataclass` only when pydantic is not
+  already a dependency of the project.
 - **JS / TS**: `eslint` (lint) + `prettier` (format).
 - Do not disable a lint rule inline unless justified with a short comment explaining why.
 
