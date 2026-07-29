@@ -1,6 +1,6 @@
 ---
 name: backend-scaffold
-description: Crea un endpoint o módulo de backend respetando la separación por capas del estándar del equipo (routers → services → repositories en FastAPI, o el layout estándar de app en Django). Úsala cuando el usuario quiera agregar un endpoint, un recurso o un módulo nuevo al backend y quiera que quede bien ubicado desde el principio. Frases típicas que la disparan: "crea un endpoint para X", "agrega un módulo de Y", "necesito un CRUD de Z", "arma la estructura para este recurso", "scaffolding del backend", "dónde debería ir este endpoint", "crea el servicio y el repositorio para esto".
+description: Crea un endpoint o módulo de backend respetando la separación por capas del estándar del equipo (routers → services → repositories en FastAPI, o el layout estándar de app en Django). Úsala cuando el usuario quiera agregar un endpoint, un recurso o un módulo nuevo al backend y quiera que quede bien ubicado desde el principio. Frases típicas que la disparan: "crea un endpoint para X", "agrega un módulo de Y", "necesito un CRUD de Z", "arma la estructura para este recurso", "scaffolding del backend", "dónde debería ir este endpoint", "crea el servicio y el repositorio para esto". Aplica a trabajo **acotado**: si la funcionalidad es grande, toca varias capas o todavía no está definida su forma, primero usa `feature-plan` y vuelve acá para construir cada etapa.
 ---
 
 # Scaffolding de backend por capas
