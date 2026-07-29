@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history so the version-bump check can diff against the PR base.
+          fetch-depth: 0
 
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
@@ -17,3 +20,22 @@ jobs:
       # Validate the marketplace manifest and every plugin it declares.
       - name: Validate marketplace
         run: claude plugin validate .
+
+      # Guard the guard: prove the conventions checker still detects violations
+      # before trusting the verdict it gives below.
+      - name: Test conventions checker
+        run: bash scripts/test_check_conventions.sh
+
+      # Conventions the CLI cannot see: registration, skill frontmatter,
+      # bundled-file references, portable paths, version bumps, context budget,
+      # hard-coded secrets. On a pull request the base SHA enables the
+      # version-bump check; on a push to main it was already gated by the PR.
+      - name: Check conventions
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ -n "$BASE_SHA" ]; then
+            python3 scripts/check_conventions.py --base "$BASE_SHA"
+          else
+            python3 scripts/check_conventions.py
+          fi

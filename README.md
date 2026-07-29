@@ -16,8 +16,9 @@ claude plugin marketplace add imfd/claude-marketplace     # from GitHub
 claude plugin marketplace add /path/to/claude-marketplace # from a local directory
 
 # 2. Install the plugins you want (marketplace name is "imfd-marketplace")
-claude plugin install dev-workflow@imfd-marketplace
 claude plugin install team-standards@imfd-marketplace
+claude plugin install git-workflow@imfd-marketplace
+claude plugin install dev-toolkit@imfd-marketplace
 claude plugin install marketplace-authoring@imfd-marketplace
 ```
 
@@ -38,7 +39,8 @@ gets the plugins enabled automatically:
     }
   },
   "enabledPlugins": {
-    "dev-workflow@imfd-marketplace": true
+    "team-standards@imfd-marketplace": true,
+    "git-workflow@imfd-marketplace": true
   }
 }
 ```
@@ -70,6 +72,18 @@ When does a change become visible?
 Team flow: edit → PR (CI validates) → merge to `main` → everyone runs `marketplace update`
 + `plugin update` and restarts.
 
+### Renamed plugins
+
+`dev-workflow` was split into `git-workflow` (repository lifecycle) and `dev-toolkit`
+(development activities). The `renames` map in `marketplace.json` migrates this for you:
+after `marketplace update`, a session that had `dev-workflow` enabled loads it as
+`git-workflow`, shows a one-line notice, and rewrites the key in your settings. On a GitHub
+source you may need `claude plugin install git-workflow@imfd-marketplace` once to fetch it
+under the new name. `dev-toolkit` is a new plugin — install it explicitly if you want it.
+
+Never delete a plugin entry without adding its `renames` mapping first, or consumers get
+`plugin-not-found`. The map is append-only: keep old entries so rename chains keep resolving.
+
 ## Where it lives on your machine
 
 | What | Location |
@@ -84,36 +98,59 @@ Team flow: edit → PR (CI validates) → merge to `main` → everyone runs `mar
 
 | Plugin | What it provides |
 |--------|------------------|
-| `dev-workflow` | Skills for the git/PR/review lifecycle: `git-commits`, `pr-description`, `pre-merge-review`, `frontend-handoff` |
-| `marketplace-authoring` | Meta-tooling to extend the marketplace: skills `new-plugin`, `new-skill`, `new-agent`, `new-connector`, `validate-marketplace` + a bundled schema reference |
-| `team-standards` | Injects the team's coding standards & PR conventions into every session (SessionStart hook). Edit `plugins/team-standards/context/team-standards.md` to change the standard |
+| `team-standards` | The team's engineering standard, injected into every session (SessionStart hook), plus the mechanical pre-commit checks that enforce it. Edit `plugins/team-standards/context/team-standards.md` to change the standard |
+| `git-workflow` | Repository lifecycle: `git-commits`, `pr-description`, `pre-merge-review` |
+| `dev-toolkit` | Development activities, named by area: `frontend-handoff`, `backend-handoff`, `backend-scaffold`, `standards-audit` |
+| `marketplace-authoring` | Meta-tooling to extend the marketplace: `new-plugin`, `new-skill`, `new-agent`, `new-connector`, `validate-marketplace`, `audit-marketplace` + a bundled schema reference |
 
 ## Repository layout
 
 ```
 claude-marketplace/
 ├── .claude-plugin/
-│   └── marketplace.json            # Single source of truth: lists all plugins
+│   └── marketplace.json            # Single source of truth: lists all plugins + renames
 ├── plugins/
-│   ├── dev-workflow/
+│   ├── team-standards/
 │   │   ├── .claude-plugin/plugin.json
-│   │   └── skills/                 # git-commits, pr-description, pre-merge-review, frontend-handoff
-│   ├── marketplace-authoring/
+│   │   ├── hooks/                  # SessionStart -> injects tier 1 + the tier 2 paths
+│   │   ├── pre-commit/             # git-side mechanical checks + config template
+│   │   ├── context/                # tier 1: always injected, kept small
+│   │   ├── references/             # tier 2: detail, read on demand by skills
+│   │   └── skills/                 # setup-standards-lint
+│   ├── git-workflow/
 │   │   ├── .claude-plugin/plugin.json
-│   │   ├── skills/                 # new-plugin, new-skill, new-agent, new-connector, validate-marketplace
-│   │   └── references/             # bundled schema reference
-│   └── team-standards/
+│   │   ├── scripts/                # shared across this plugin's skills
+│   │   └── skills/                 # git-commits, pr-description, pre-merge-review
+│   ├── dev-toolkit/
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── scripts/                # shared across this plugin's skills
+│   │   └── skills/                 # frontend-handoff, backend-handoff, backend-scaffold, standards-audit
+│   └── marketplace-authoring/
 │       ├── .claude-plugin/plugin.json
-│       ├── hooks/hooks.json        # SessionStart -> injects the standard
-│       └── context/team-standards.md
+│       ├── skills/                 # new-plugin, new-skill, new-agent, new-connector, validate-marketplace, audit-marketplace
+│       └── references/             # bundled schema reference
+├── scripts/
+│   ├── check_conventions.py        # conventions the CLI validator cannot see
+│   └── test_check_conventions.sh   # proves the checker still detects violations
 ├── .github/workflows/
-│   └── validate.yml                # CI: runs `claude plugin validate .` on every PR
+│   └── validate.yml                # CI: plugin validate + checker tests + conventions
 ├── CONTRIBUTING.md                 # Conventions for adding/updating plugins
 └── README.md
 ```
+
+## Checks
+
+```bash
+claude plugin validate .                          # manifest + plugin schema
+bash scripts/test_check_conventions.sh            # the checker still catches violations
+python3 scripts/check_conventions.py --base main  # our own conventions
+```
+
+CI runs all three on every PR. The `--base` argument enables the version-bump check;
+without it that single check is skipped.
 
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md). In short: add or edit a plugin under
 `plugins/`, register it in `marketplace.json`, bump the plugin `version`, and open
-a PR — CI validates the manifest before merge.
+a PR — CI validates the manifest and our conventions before merge.

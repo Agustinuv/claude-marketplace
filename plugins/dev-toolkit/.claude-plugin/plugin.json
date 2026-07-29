@@ -1,0 +1,12 @@
+{
+  "name": "dev-toolkit",
+  "displayName": "Dev Toolkit",
+  "version": "0.1.0",
+  "description": "Development activity skills, named by area: backend/frontend contract handoffs, layered scaffolding, and auditing existing code against the team standard.",
+  "author": {
+    "name": "IMFD",
+    "email": "agustin.urrutia@imfd.cl"
+  },
+  "keywords": ["backend", "frontend", "handoff", "scaffold", "audit"],
+  "license": "MIT"
+}

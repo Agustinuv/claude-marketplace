@@ -1,0 +1,68 @@
+# Review checklist — the judgment layer
+
+Tier 2 detail read by the `pre-merge-review` skill. These are the standard's rules that
+**cannot be linted**: they need a judgment call about whether code is in the right place and
+does one thing. The mechanical rules (file length, comment language, formatting) are already
+enforced by pre-commit — do not re-report them here unless a check was silenced without
+justification.
+
+Use the existing severity scale. Default to 🟠/🟡 for structural findings: they are real but
+rarely worth blocking a merge on their own.
+
+- 🔴 **Bloqueante** — only when it will break, expose data, or is materially harder to undo
+  later (a migration, a public contract, a layering violation being newly introduced across
+  a boundary).
+- 🟠 **Importante** — should be fixed in this PR.
+- 🟡 **Menor / sugerencia** — worth noting, author decides.
+
+## 1. Module cohesion
+
+- Does each changed file do **one** thing its name predicts? A file that grew a second
+  responsibility is the most common finding — flag *what* the second responsibility is, not
+  just that the file is long.
+- Are new functions small and cohesive, or is there one long function doing sequential
+  unrelated work?
+- Is there dead code, commented-out code, or an abstraction with a single caller added "for
+  later" (YAGNI)?
+
+## 2. File placement
+
+- Is each new file where its siblings already are, or does it start a **parallel structure**
+  next to an existing one? (Per-stack layouts: `backend-layout.md`, `frontend-layout.md`,
+  `data-layout.md`.)
+- Frontend: is a component used by one route sitting in the shared folder, or vice versa?
+- Was something promoted to shared with only one consumer?
+
+## 3. Layer boundaries
+
+- **Backend:** does a router query the database, or a repository contain business rules?
+  Could each changed service still be called from an Airflow task or a CLI script with no
+  HTTP involved? If not, HTTP concerns leaked downward.
+- **Frontend:** does a component build raw HTTP requests, or both fetch and render complex
+  UI without splitting the data concern?
+- Raw SQL: present, and if so is it parametrized *and* justified in a comment?
+
+## 4. Consistency with the surrounding code
+
+- Does the change follow the conventions already in that file/module, or introduce a second
+  way of doing the same thing (a second styling system, a second fetching library, a third
+  error-handling pattern)?
+- For rules still marked **⚠️ POR DEFINIR** in the references: the standard is "match the
+  repo". Flag a *new* third pattern, not the repo's existing choice.
+
+## 5. Language and naming
+
+- Are identifiers, error messages, and log lines in **English**? The pre-commit check covers
+  comments and docstrings; identifier and message language is a judgment call.
+- Do names say what the thing is? Flag names that require reading the body to understand.
+
+## 6. Scope of the change
+
+- Does the diff contain unrelated refactoring? The standard says change only what the task
+  needs — mixed-purpose diffs are harder to review and to revert.
+- Should this be split into separate commits or separate PRs?
+
+## 7. Silenced checks
+
+- Any inline lint/check suppression added? Each one needs a short comment explaining why.
+  An unexplained suppression is 🟠 — it is how mechanical enforcement quietly erodes.

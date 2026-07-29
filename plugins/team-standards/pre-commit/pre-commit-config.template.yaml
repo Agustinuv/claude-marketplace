@@ -1,0 +1,51 @@
+# IMFD team standards — mechanical checks.
+#
+# Installed by the `setup-standards-lint` skill (team-standards plugin). The
+# scripts live in .standards/ at the repo root.
+#
+# These hooks receive only the files a commit touches, so pre-existing
+# violations in files nobody is editing never block a commit. Legacy code gets
+# fixed when someone edits it -- use the `standards-audit` skill (dev-toolkit)
+# to see the full picture deliberately instead.
+
+repos:
+  - repo: local
+    hooks:
+      - id: imfd-file-length
+        name: file length (300 warn / 400 limit)
+        entry: .standards/check_file_length.py
+        language: script
+        files: \.(py|js|jsx|ts|tsx|vue)$
+
+      - id: imfd-comment-language
+        name: comments and docstrings in English
+        entry: .standards/check_comment_language.py
+        language: script
+        files: \.(py|js|jsx|ts|tsx|vue|sh|sql)$
+
+# Formatting and linting per the team standard: black for Python, eslint +
+# prettier for JS/TS. Never ruff. Uncomment what applies to this repo and pin
+# the revision.
+#
+#  - repo: https://github.com/psf/black
+#    rev: <pin a release>
+#    hooks:
+#      - id: black
+#
+#  - repo: local
+#    hooks:
+#      - id: eslint
+#        name: eslint
+#        entry: npx eslint --fix
+#        language: system
+#        files: \.(js|jsx|ts|tsx|vue)$
+#
+#      - id: prettier
+#        name: prettier
+#        entry: npx prettier --write
+#        language: system
+#        files: \.(js|jsx|ts|tsx|vue|css|scss|json|md)$
+
+# To change a threshold for this repo, pass it explicitly and say why:
+#      - id: imfd-file-length
+#        entry: .standards/check_file_length.py --max 600   # generated clients

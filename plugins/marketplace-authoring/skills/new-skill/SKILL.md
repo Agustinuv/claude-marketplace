@@ -32,14 +32,15 @@ Create a well-formed `skills/<name>/SKILL.md` inside a chosen plugin. Follow
    # <Title>
 
    <Step-by-step instructions for Claude. Use $ARGUMENTS for user input.
-   Reference bundled files as ${CLAUDE_PLUGIN_ROOT}/skills/<name>/...>
+   Reference the skill's own bundled files as ${CLAUDE_SKILL_DIR}/...>
    ```
    The `description` is what makes Claude auto-invoke the skill — make it concrete, not vague.
 
 5. **Supporting files (optional):** create `scripts/`, `references/`, or `templates/`
-   subfolders as needed and reference them from the SKILL.md with
-   `${CLAUDE_SKILL_DIR}/...` (the skill's own directory; never `../`, never
-   `${CLAUDE_PLUGIN_ROOT}` for skill files). Write code comments/docstrings in English.
+   subfolders as needed and reference them with `${CLAUDE_SKILL_DIR}/...`. If the file is
+   needed by **more than one skill of this plugin**, put it at the plugin root instead
+   (`<plugin>/scripts/…`) and reference it as `${CLAUDE_PLUGIN_ROOT}/scripts/…` rather than
+   duplicating it. Never use `../`. Write code comments/docstrings in English.
 
 6. **Bump** the plugin's `version` in `plugin.json`, then **validate**:
    `claude plugin validate .`.

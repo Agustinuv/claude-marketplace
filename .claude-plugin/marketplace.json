@@ -8,20 +8,31 @@
   "metadata": {
     "pluginRoot": "./plugins"
   },
+  "renames": {
+    "dev-workflow": "git-workflow"
+  },
   "plugins": [
     {
-      "name": "dev-workflow",
-      "source": "./plugins/dev-workflow",
-      "displayName": "Dev Workflow",
-      "description": "Team standard for the git/PR/review lifecycle: commit messages, PR descriptions, pre-merge review, and backend->frontend handoff.",
+      "name": "dev-toolkit",
+      "source": "./plugins/dev-toolkit",
+      "displayName": "Dev Toolkit",
+      "description": "Development activity skills, named by area: backend/frontend contract handoffs, layered scaffolding, and auditing existing code against the team standard.",
+      "category": "development",
+      "keywords": ["backend", "frontend", "handoff", "scaffold", "audit"]
+    },
+    {
+      "name": "git-workflow",
+      "source": "./plugins/git-workflow",
+      "displayName": "Git Workflow",
+      "description": "Team standard for the repository lifecycle: commit messages (Platanus convention), PR descriptions, and pre-merge review.",
       "category": "productivity",
-      "keywords": ["git", "pr", "code-review", "workflow"]
+      "keywords": ["git", "pr", "code-review", "commit", "workflow"]
     },
     {
       "name": "marketplace-authoring",
       "source": "./plugins/marketplace-authoring",
       "displayName": "Marketplace Authoring",
-      "description": "Meta-tooling to create and modify the marketplace itself: scaffold plugins, skills, subagents, and MCP connectors, then validate before publishing.",
+      "description": "Meta-tooling to create and modify the marketplace itself: scaffold plugins, skills, subagents, and MCP connectors, then validate and audit before publishing.",
       "category": "development",
       "keywords": ["authoring", "scaffold", "plugin", "mcp", "meta"]
     },
@@ -29,9 +40,9 @@
       "name": "team-standards",
       "source": "./plugins/team-standards",
       "displayName": "Team Standards",
-      "description": "Injects the team's coding standards, PR conventions, and architecture patterns into every session as persistent context (SessionStart hook).",
+      "description": "Injects the team's coding standards, PR conventions, and architecture patterns into every session as persistent context (SessionStart hook), and installs the mechanical pre-commit checks that enforce them.",
       "category": "development",
-      "keywords": ["standards", "conventions", "clean-code", "context"]
+      "keywords": ["standards", "conventions", "clean-code", "context", "pre-commit"]
     }
   ]
 }

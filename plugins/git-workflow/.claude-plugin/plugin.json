@@ -1,0 +1,12 @@
+{
+  "name": "git-workflow",
+  "displayName": "Git Workflow",
+  "version": "1.1.0",
+  "description": "Team standard for the repository lifecycle. Bundles skills for commit messages (Platanus standard), PR descriptions, and pre-merge review.",
+  "author": {
+    "name": "IMFD",
+    "email": "agustin.urrutia@imfd.cl"
+  },
+  "keywords": ["git", "pr", "code-review", "commit", "workflow"],
+  "license": "MIT"
+}
