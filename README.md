@@ -100,7 +100,7 @@ Never delete a plugin entry without adding its `renames` mapping first, or consu
 |--------|------------------|
 | `team-standards` | The team's engineering standard, injected into every session (SessionStart hook), plus the mechanical pre-commit checks that enforce it. Edit `plugins/team-standards/context/team-standards.md` to change the standard |
 | `git-workflow` | Repository lifecycle: `git-commits`, `pr-description`, `pre-merge-review` |
-| `dev-toolkit` | Development activities, named by area: `frontend-handoff`, `backend-handoff`, `backend-scaffold`, `standards-audit` |
+| `dev-toolkit` | Development activities, named by area: `feature-plan`, `frontend-handoff`, `backend-handoff`, `backend-scaffold`, `standards-audit` |
 | `marketplace-authoring` | Meta-tooling to extend the marketplace: `new-plugin`, `new-skill`, `new-agent`, `new-connector`, `validate-marketplace`, `audit-marketplace` + a bundled schema reference |
 
 ## Repository layout
@@ -124,7 +124,7 @@ claude-marketplace/
 │   ├── dev-toolkit/
 │   │   ├── .claude-plugin/plugin.json
 │   │   ├── scripts/                # shared across this plugin's skills
-│   │   └── skills/                 # frontend-handoff, backend-handoff, backend-scaffold, standards-audit
+│   │   └── skills/                 # feature-plan, frontend-handoff, backend-handoff, backend-scaffold, standards-audit
 │   └── marketplace-authoring/
 │       ├── .claude-plugin/plugin.json
 │       ├── skills/                 # new-plugin, new-skill, new-agent, new-connector, validate-marketplace, audit-marketplace

@@ -56,8 +56,8 @@ Three layers, top-down:
      mechanical checks (named apart from `hooks/`, which means Claude Code hooks), installed into a
      consumer repo by the `setup-standards-lint` skill.
    - **`git-workflow`** — repository lifecycle: `git-commits`, `pr-description`, `pre-merge-review`.
-   - **`dev-toolkit`** — development activities, named `<area>-<action>`: `frontend-handoff`,
-     `backend-handoff`, `backend-scaffold`, `standards-audit`.
+   - **`dev-toolkit`** — development activities, named `<subject>-<action>`: `feature-plan`,
+     `frontend-handoff`, `backend-handoff`, `backend-scaffold`, `standards-audit`.
    - **`marketplace-authoring`** — meta-tooling to extend *this* repo: `new-plugin`, `new-skill`,
      `new-agent`, `new-connector`, `validate-marketplace`, `audit-marketplace`. When scaffolding
      anything here, prefer invoking these skills — they encode the conventions below. The frontmatter
@@ -84,7 +84,8 @@ Three layers, top-down:
 Consumers only pick up a plugin change when its `plugin.json` `version` is **bumped**; plain commits are
 invisible to `claude plugin update`. So: **any change to a plugin requires bumping that plugin's
 `version`** (unless the plugin intentionally omits `version`, in which case each commit SHA counts as a
-new version — used for actively-developed plugins). Tag stable releases `<plugin-name>--v<version>`.
+new version — used for actively-developed plugins). We do not tag releases: the `version` in
+`plugin.json` is the only thing consumers resolve, and merging to `main` *is* the release.
 
 ## Team flow
 

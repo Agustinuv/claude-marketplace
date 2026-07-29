@@ -52,8 +52,8 @@ resolving for people who skipped a few updates.
 ## Versioning
 
 - **Stable plugins:** set `version` in `plugin.json` and bump it on every change
-  (Claude Code only pulls updates when the version changes). Tag releases
-  `<plugin-name>--v<version>`.
+  (Claude Code only pulls updates when the version changes). We do not tag releases —
+  the `version` field is the only thing consumers resolve.
 - **Actively developed plugins:** omit `version` so each commit SHA is treated as a
   new version.
 
