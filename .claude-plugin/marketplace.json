@@ -16,9 +16,9 @@
       "name": "dev-toolkit",
       "source": "./plugins/dev-toolkit",
       "displayName": "Dev Toolkit",
-      "description": "Development activity skills, named by area: backend/frontend contract handoffs, layered scaffolding, and auditing existing code against the team standard.",
+      "description": "Development activity skills, named by area: planning a large feature before coding, backend/frontend contract handoffs, layered scaffolding, and auditing existing code against the team standard.",
       "category": "development",
-      "keywords": ["backend", "frontend", "handoff", "scaffold", "audit"]
+      "keywords": ["backend", "frontend", "planning", "handoff", "scaffold", "audit"]
     },
     {
       "name": "git-workflow",
