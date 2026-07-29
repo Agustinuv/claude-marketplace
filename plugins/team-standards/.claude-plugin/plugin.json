@@ -1,12 +1,12 @@
 {
   "name": "team-standards",
   "displayName": "Team Standards",
-  "version": "0.4.0",
-  "description": "Injects the IMFD team's coding standards, PR conventions, and architecture patterns into every session as persistent context, via a SessionStart hook. Edit context/team-standards.md to change the standard.",
+  "version": "0.5.0",
+  "description": "Owns the IMFD team's engineering standard and its enforcement. Injects the standard into every session via a SessionStart hook (context/team-standards.md), keeps per-stack detail in references/ for skills to read on demand, and installs the mechanical pre-commit checks with the setup-standards-lint skill.",
   "author": {
     "name": "IMFD",
     "email": "agustin.urrutia@imfd.cl"
   },
-  "keywords": ["standards", "conventions", "clean-code", "pr", "context"],
+  "keywords": ["standards", "conventions", "clean-code", "pr", "context", "pre-commit"],
   "license": "MIT"
 }

@@ -24,7 +24,8 @@ Run the mechanical validation plus a conventions checklist over every plugin.
    - Every `SKILL.md` has `name` + a concrete, trigger-oriented `description`.
    - Every subagent `.md` has `name` + `description`.
    - No hard-coded secrets anywhere; credentials go through `userConfig` + `${user_config.*}`.
-   - No `../` references or paths outside a plugin folder; bundled files use `${CLAUDE_PLUGIN_ROOT}`.
+   - No `../` references or paths outside a plugin folder. A skill's own files use
+     `${CLAUDE_SKILL_DIR}`; files shared across the plugin use `${CLAUDE_PLUGIN_ROOT}`.
    - Code comments/docstrings are in English.
 
 5. **Version bump:** for any plugin that changed, confirm its `version` in `plugin.json`

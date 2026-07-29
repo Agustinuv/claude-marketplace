@@ -62,6 +62,23 @@ diff) para entender el contexto antes de juzgar.
 
 ## Paso 3 — Analizar
 
+### 3.a Cargar el checklist de juicio
+
+Antes de recorrer el diff, busca en tu contexto el bloque **"Tier 2 references"** que el plugin
+`team-standards` inyecta al inicio de cada sesión: incluye la ruta absoluta de
+`review-checklist.md`. **Léelo.** Contiene los criterios estructurales del estándar del equipo
+que no son verificables mecánicamente, con la severidad que corresponde a cada uno.
+
+Si ese bloque no está en el contexto (el plugin `team-standards` no está instalado), sigue con
+las dimensiones de abajo y anótalo en una línea del informe: la revisión estructural queda
+apoyada solo en las convenciones visibles en el repo.
+
+**No reportes lo que ya bloquea pre-commit** — largo de archivo, idioma de comentarios,
+formato. Esos chequeos corren antes del commit y repetirlos solo agrega ruido. La única
+excepción es una supresión inline sin comentario que la justifique: eso sí es un hallazgo.
+
+### 3.b Dimensiones
+
 Recorre los cambios cubriendo estas dimensiones. No todas aplican a cada rama; omite las que no vengan al caso.
 
 - **Funcionalidad y corrección**: ¿el código hace lo que dice el commit/PR? ¿hay bugs lógicos?
@@ -75,13 +92,24 @@ Recorre los cambios cubriendo estas dimensiones. No todas aplican a cada rama; o
   permisos/authz, exposición de datos sensibles en logs o respuestas.
 - **Tests**: ¿lo nuevo está cubierto? ¿los tests prueban el comportamiento, no solo la implementación?
   ¿faltan casos borde en los tests?
+- **Estructura y organización** (detalle en `review-checklist.md`): cohesión de cada archivo
+  tocado — ¿sigue haciendo una sola cosa que su nombre predice?; ubicación del archivo o
+  componente — ¿está donde sus pares, o abre una estructura paralela?; violaciones de capa —
+  un router que consulta la BD, un servicio que construye errores HTTP, un componente que arma
+  requests crudos; y alcance del diff — refactors no relacionados con la tarea.
 - **Consistencia**: encaja con la arquitectura y los patrones ya presentes en el proyecto.
+  Un tercer patrón nuevo para algo que el repo ya resuelve de una forma es hallazgo; la forma
+  que el repo ya eligió, no.
 
 Asigna a cada hallazgo una severidad:
 
 - **Bloqueante** — debe arreglarse antes de mergear (bug, riesgo de seguridad, regresión).
 - **Importante** — debería arreglarse, pero no necesariamente bloquea (deuda real, riesgo medio).
 - **Menor / sugerencia** — mejora opcional (estilo, micro-optimización, nit).
+
+Los hallazgos **estructurales** rara vez son bloqueantes por sí solos: van como 🟠/🟡 salvo que
+introduzcan una violación de capa nueva a través de un límite, o toquen algo caro de revertir
+(una migración, un contrato público).
 
 ## Paso 4 — Veredicto y entregable
 

@@ -1,9 +1,12 @@
 # IMFD — Team engineering standards
 
-> This is the team's single source of truth for how we build. It is injected into
-> every Claude Code session (once per session) by the `team-standards` plugin.
-> **Edit this file** to change the standard, bump the plugin `version`, and open a PR.
-> Keep it under 10,000 characters (the SessionStart injection limit).
+> The team's single source of truth for how we build, injected into every Claude Code
+> session by the `team-standards` plugin. **Edit this file** to change the standard, bump
+> the plugin `version`, and open a PR.
+>
+> **This is tier 1: it is re-injected into every session, so its size is a recurring token
+> cost.** Keep it to rules that change how each line gets written. Detail, examples and
+> per-stack layouts belong in the plugin's `references/`, which skills read on demand.
 
 ## Principles
 
@@ -11,15 +14,40 @@
   abstraction (YAGNI). Prefer readability over cleverness.
 - **Match the surrounding code**: follow the conventions, naming, and structure already
   present in the file/module you are editing.
-- **Comments & docstrings in English**, always — even when the conversation is in Spanish.
+- **Change only what the task needs.** Don't refactor unrelated code in the same change.
 - **No secrets in code or logs.** Read config from environment / settings, never hard-code
   tokens, and never log sensitive data.
-- **Change only what the task needs.** Don't refactor unrelated code in the same change.
+
+## Language: the codebase is in English
+
+Everything that lives in the repository is written in **English**, regardless of the
+language of the conversation:
+
+- Identifiers — variables, functions, classes, modules, DB columns, API fields.
+- Comments and docstrings.
+- **Error messages, exception messages, and log lines.**
+- Commit messages, branch names, and PR descriptions.
+
+The one exception is copy shown to end users (UI strings, user-facing notifications),
+which follows the product's own language.
+
+## File & module organization
+
+- **File length: 300 lines warns, 400 lines is the limit.** Past that, split by
+  responsibility — a long file signals a module doing more than one thing, not a
+  formatting problem. The pre-commit check inspects **only the files a commit touches**, so
+  existing long files never block unrelated work; they get fixed when someone edits them.
+- **One responsibility per module.** The file name should predict its contents.
+- **Put a file where its siblings already are.** Never start a parallel structure next to
+  an existing one. The per-stack layouts are in the tier 2 references listed at the end of
+  this document.
+- **No cross-layer shortcuts.** A router doesn't touch the database directly; a component
+  doesn't build raw HTTP requests.
 
 ## Tooling & formatting
 
-Formatting and linting are standardized and enforced via **pre-commit hooks** — run them
-before committing; do not hand-format around the tools.
+Formatting and linting are enforced by **pre-commit hooks** — run them before committing;
+do not hand-format around the tools. Install ours with the `setup-standards-lint` skill.
 
 - **Python**: `black` (format). Do not use `ruff`.
 - **Python data models**: prefer **pydantic `BaseModel`** over `dataclasses` for structured
@@ -27,7 +55,8 @@ before committing; do not hand-format around the tools.
   (FastAPI, `pydantic-settings`). Use a plain `dataclass` only when pydantic is not
   already a dependency of the project.
 - **JS / TS**: `eslint` (lint) + `prettier` (format).
-- Do not disable a lint rule inline unless justified with a short comment explaining why.
+- Do not silence a check inline without a short comment explaining why. This applies both
+  to lint rules and to our own pre-commit checks.
 
 ## Git & commits
 
@@ -55,40 +84,27 @@ tipo(contexto): description in english, imperative, no trailing period
 ## Architecture & stack conventions
 
 Our stack: FastAPI / Django · PostgreSQL / Qdrant · Airflow · Next.js / Vue · Docker · RAG.
-Both backend and frontend frameworks are used depending on the project — apply the rule
-that fits the repo you are in.
+Both backend and frontend frameworks are in use — apply the rule that fits the repo you
+are in. The rules below are the ones that always apply; full layouts and rationale are in
+the tier 2 references listed at the end of this document.
 
-### Backend (FastAPI / Django)
+- **Backend**: layered separation — routers/endpoints → services → repositories; Django
+  projects follow the standard app layout. **ORM only** (SQLAlchemy / Django ORM); raw SQL
+  is exceptional, justified, and always parametrized. Config from environment via
+  `pydantic-settings` or Django settings. Enforce authorization on **every** endpoint that
+  exposes data.
+- **Data**: every schema change ships a versioned migration (Alembic / Django); roll out
+  non-breaking. Airflow DAGs are idempotent and re-runnable. For RAG, always record the
+  embedding model and chunking strategy used.
+- **Frontend**: function components + hooks (React) / Composition API (Vue). Keep state
+  local; reach for a store only when state is genuinely shared. **Tailwind CSS** as the base
+  styling system. Integrate backend changes from a `frontend-handoff` brief when provided.
 
-- **Structure**: aim for layered separation (routers/endpoints → services → repositories).
-  In Django-based projects (e.g. Vincula), follow the standard Django app layout
-  (models / views / serializers).
-- **Data access**: **ORM only** (SQLAlchemy / Django ORM). Raw SQL is exceptional — justify
-  it and always parametrize.
-- **Config**: per framework — `pydantic-settings` (FastAPI) or Django settings, both reading
-  from environment variables. Never hard-code config or secrets.
-- **Auth/authz**: varies by project; whatever the pattern, enforce authorization on every
-  endpoint that exposes data.
-- **Error handling**: _(por definir — dirección propuesta:_ excepciones de dominio propias
-  mapeadas por un handler central a respuestas HTTP consistentes; aún no obligatorio).
+Two conventions are still open — do not invent them, ask the team:
 
-### Data (PostgreSQL / Qdrant / Airflow)
-
-- **Migrations**: every schema change ships a versioned migration (Alembic / Django ORM).
-  Roll out non-breaking: add column → deploy code → remove deprecated column. Index foreign
-  keys and common filters.
-- **Airflow**: DAGs are idempotent and re-runnable; no hidden state carried between tasks.
-- **RAG**: defined per project — but always record the embedding model and chunking strategy
-  used so ingestion is reproducible.
-
-### Frontend (Next.js / Vue)
-
-- **Components & state**: function components + hooks (React) / Composition API (Vue). Keep
-  state local; reach for Context or a store only when state is genuinely shared. Minimize
-  global state.
-- **Styling**: **Tailwind CSS** as the base styling system.
-- **API calls**: _(por definir — aún sin convención de equipo para consumir el backend)._
-- Integrate backend changes from a `frontend-handoff` brief when one is provided.
+- Backend **error handling**: _(por definir — dirección propuesta:_ excepciones de dominio
+  propias mapeadas por un handler central a respuestas HTTP consistentes).
+- Frontend **API calls**: _(por definir — aún sin convención de equipo)._
 
 ## Security (baseline)
 

@@ -150,7 +150,7 @@ Eres el agente del repositorio de **frontend**. Tu tarea es integrar el cambio d
 Guarda el brief final en un archivo temporal y cópialo con:
 
 ```bash
-bash ${CLAUDE_SKILL_DIR}/scripts/copy_to_clipboard.sh <archivo-temporal>
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/copy_to_clipboard.sh <archivo-temporal>
 ```
 
 - Si el script confirma éxito (`OK: ...`), avisa brevemente al usuario cómo se copió
