@@ -1,6 +1,6 @@
 ---
 name: audit-marketplace
-description: Audita la calidad y la coherencia del marketplace completo, más allá de la validación mecánica: descripciones de skills que compiten por el mismo trigger, referencias cruzadas obsoletas, criterios duplicados que ya derivaron entre plugins, skills sin uso y plugins con responsabilidades mezcladas. Úsala cuando el usuario quiera mejorar el marketplace en vez de solo validarlo: "audita el marketplace", "qué se puede mejorar acá", "revisa si las skills se pisan entre ellas", "hay cosas duplicadas u obsoletas", "esto está bien organizado", "revisa la coherencia de los plugins", "actualiza los prompts de las skills".
+description: Audita la calidad y la coherencia del marketplace completo, más allá de la validación mecánica: descripciones de skills que compiten por el mismo trigger, referencias cruzadas obsoletas, criterios duplicados que ya derivaron entre plugins, skills sin uso y plugins con responsabilidades mezcladas. Corre solo en el repositorio del marketplace. Úsala cuando el usuario quiera mejorar el marketplace en vez de solo validarlo: "audita el marketplace", "qué se puede mejorar en el marketplace", "revisa si las skills se pisan entre ellas", "hay plugins o skills duplicados u obsoletos", "están bien organizados los plugins", "revisa la coherencia de los plugins", "actualiza los prompts de las skills". No la uses para auditar el código de una aplicación contra el estándar del equipo: eso es `standards-audit`.
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
