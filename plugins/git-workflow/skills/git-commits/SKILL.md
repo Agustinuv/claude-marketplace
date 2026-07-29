@@ -1,6 +1,6 @@
 ---
 name: git-commits
-description: "Crea mensajes de commit de git siguiendo el estandar de Platanus (tipo(contexto) seguido de descripcion en ingles, imperativo, max 100 caracteres). Usala siempre que el usuario pida hacer un commit, generar un mensaje de commit, subir cambios a git, o cuando haya cambios sin commitear (git status/diff) y se sugiera guardarlos en git. Tambien aplica si el usuario menciona commit, git commit, guardar cambios en git, o pide dividir cambios grandes en varios commits."
+description: "Crea mensajes de commit de git siguiendo el estándar de Platanus (tipo(contexto) seguido de descripción en inglés, imperativo, máx 100 caracteres). Úsala siempre que el usuario pida hacer un commit, generar un mensaje de commit, subir cambios a git, o cuando haya cambios sin commitear (git status/diff) y se sugiera guardarlos en git. También aplica si el usuario menciona commit, git commit, guardar cambios en git, o pide dividir cambios grandes en varios commits."
 ---
 
 # Git Commits (estándar Platanus)

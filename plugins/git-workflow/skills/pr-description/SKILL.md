@@ -1,6 +1,6 @@
 ---
 name: pr-description
-description: "Genera el markdown para la descripcion de una Pull Request de GitHub (siempre redactada en ingles), comparando la rama actual con una rama destino (main por defecto). Usa esta skill siempre que el usuario pida generar/armar/redactar la descripcion o el markdown de un PR o MR, pida comparar la rama actual con main (o con otra rama) para preparar un pull request, o pida un resumen de cambios para subir a GitHub. Tambien aplica si menciona 'PR', 'pull request', 'MR', 'merge request', o pide copiar la descripcion del PR al portapapeles."
+description: "Genera el markdown para la descripción de una Pull Request de GitHub (siempre redactada en inglés), comparando la rama actual con una rama destino (main por defecto). Usa esta skill siempre que el usuario pida generar/armar/redactar la descripción o el markdown de un PR o MR, pida comparar la rama actual con main (o con otra rama) para preparar un pull request, o pida un resumen de cambios para subir a GitHub. También aplica si menciona 'PR', 'pull request', 'MR', 'merge request', o pide copiar la descripción del PR al portapapeles."
 ---
 
 # Generador de descripción de PR
