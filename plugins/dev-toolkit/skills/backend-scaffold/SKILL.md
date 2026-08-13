@@ -53,7 +53,8 @@ Confirma con el usuario, sin asumir:
   generes un CRUD completo si solo se pide leer (YAGNI).
 - **Forma del request y del response**, campo por campo.
 - **Autorización**: quién puede llamar a cada operación, y con qué mecanismo del repo.
-- **Persistencia**: ¿el modelo ya existe? Si no, esto implica **migración versionada**.
+- **Persistencia**: ¿el modelo ya existe? Si no, esto implica **migración versionada**, que
+  genera y corre el usuario con el comando del repo (ver Paso 3).
 - **Casos de error** que el consumidor debe poder distinguir.
 
 Si el pedido viene de un brief de `backend-handoff`, el contrato ya está ahí: evalúalo en vez de
@@ -85,9 +86,25 @@ no pertenece a un modelo va en un `services.py` dentro de la app.
 
 ### Si el esquema cambia
 
-Genera la migración versionada (Alembic o Django) en el mismo cambio, y planifica el rollout
-no-breaking: agregar columna → desplegar código → backfill → recién entonces eliminar la vieja.
-Indexa las claves foráneas y las columnas por las que efectivamente se filtra.
+El cambio va acompañado de su **migración versionada**, pero **no la escribas tú**: modifica el
+modelo ORM y **pídele al usuario que corra el comando de migraciones del repo**. Revisa antes qué
+usa este repo (`Taskfile.yml`, `Makefile`, `docker-compose.yml`, README) en vez de adivinar:
+
+```bash
+task migrate                                                     # si el repo tiene task runner
+docker compose run --rm <servicio> alembic revision --autogenerate -m "add_x_to_y"
+docker compose run --rm <servicio> alembic upgrade head
+python manage.py makemigrations <app> && python manage.py migrate  # Django
+```
+
+Nunca escribas un archivo de revisión a mano ni ejecutes DDL manual: `--autogenerate` compara
+los modelos contra una base viva y esa base la tiene el usuario, no tú. Cuando te devuelva el
+archivo generado, **revísalo**: que contenga solo el cambio buscado, que `down_revision` apunte
+al head real, que `downgrade()` sea correcto, y agrega ahí lo que autogenerate no ve (backfills,
+índices).
+
+Planifica el rollout no-breaking: agregar columna → desplegar código → backfill → recién entonces
+eliminar la vieja. Indexa las claves foráneas y las columnas por las que efectivamente se filtra.
 
 ## Paso 4 — Verificar antes de cerrar
 
@@ -101,9 +118,10 @@ Indexa las claves foráneas y las columnas por las que efectivamente se filtra.
 
 ## Paso 5 — Reportar
 
-Cierra con: archivos creados y en qué capa quedó cada uno, el contrato final expuesto, si hay
-migración pendiente de aplicar, variables de entorno nuevas, y qué quedó deliberadamente fuera
-del alcance.
+Cierra con: archivos creados y en qué capa quedó cada uno, el contrato final expuesto, variables
+de entorno nuevas, y qué quedó deliberadamente fuera del alcance. Si el esquema cambió, deja el
+**comando de migración exacto que el usuario debe correr** como paso pendiente, no como un
+"acuérdate de migrar".
 
 Si durante el scaffolding detectaste que el repo se aparta del estándar en la zona que tocaste,
 menciónalo en una línea pero **no lo arregles acá** — el estándar pide cambiar solo lo que la

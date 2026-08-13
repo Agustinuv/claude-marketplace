@@ -91,7 +91,9 @@ Aquí es donde hay que leer código, no grepear. Por cada archivo relevante del 
 - **Ubicación** (frontend): componentes de una sola vista en la carpeta compartida, o compartidos
   colgando de una vista; estructuras paralelas que compiten con la existente.
 - **Migraciones** (si hay cambios de esquema en la historia reciente): ¿cada uno trae su
-  migración versionada?
+  migración versionada? ¿Las revisiones parecen generadas por la herramienta (Alembic
+  `--autogenerate` / `makemigrations`) o escritas a mano? Una revisión a mano, o una cadena de
+  `down_revision` con heads paralelos sin merge, es hallazgo.
 - **Airflow**: DAGs con estado oculto entre tareas, o que no son re-ejecutables para la misma
   fecha lógica.
 - **RAG**: ingestas donde no se puede saber qué modelo de embeddings ni qué chunking se usó.

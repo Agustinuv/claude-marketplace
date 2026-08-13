@@ -140,15 +140,19 @@ arriba. **No empieces a escribir código todavía.** Sigue este orden:
 
 4. **Implementa respetando el estándar del equipo**: separación por capas, ORM (no SQL crudo sin
    justificar y parametrizar), configuración desde variables de entorno, y **autorización
-   obligatoria en todo endpoint que exponga datos**. Si el cambio toca el esquema, incluye la
-   migración versionada correspondiente.
+   obligatoria en todo endpoint que exponga datos**. Si el cambio toca el esquema, modifica el
+   modelo ORM y **pídele al usuario que corra el comando de migraciones del repo** (`task
+   migrate`, `docker compose run --rm <servicio> alembic revision --autogenerate -m "..."` +
+   `alembic upgrade head`, `manage.py makemigrations && migrate` — revisa antes qué usa el repo).
+   No escribas el archivo de revisión a mano ni ejecutes las migraciones tú; revisa el archivo
+   generado cuando el usuario te lo devuelva.
 
 5. **Devuelve el contrato final implementado**, campo por campo y con los códigos de error, en una
    sección **"✅ Contrato implementado"** — incluso si terminó distinto a lo pedido, y sobre todo
    si terminó distinto. El usuario lo llevará de vuelta al frontend para integrarlo.
 
-6. **Cierre:** resume qué archivos creaste/modificaste, si hay migración pendiente de correr, y
-   cualquier variable de entorno nueva.
+6. **Cierre:** resume qué archivos creaste/modificaste, el comando de migración exacto que queda
+   pendiente de correr (si el esquema cambió), y cualquier variable de entorno nueva.
 ````
 
 ## Paso 4 — Copiar el brief al portapapeles

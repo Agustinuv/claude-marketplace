@@ -117,7 +117,10 @@ Revisa el plan contra lo que el estándar exige, y ajústalo antes de escribirlo
 - Separación por capas sin atajos: nada de routers que tocan la base ni componentes que arman HTTP
   a mano.
 - ORM, no SQL crudo. Todo cambio de esquema con **migración versionada y rollout no-breaking** — si
-  el plan implica renombrar o eliminar una columna en uso, tiene que partirse en etapas.
+  el plan implica renombrar o eliminar una columna en uso, tiene que partirse en etapas. Las
+  migraciones las genera la herramienta (Alembic `--autogenerate` / `makemigrations`) y **las corre
+  el desarrollador**: la etapa que toca el esquema debe dejar escrito el comando del repo (`task
+  migrate`, `docker compose run --rm <servicio> alembic upgrade head`, …) como paso manual.
 - Autorización en **todo** endpoint que exponga datos, y validación en el borde.
 - Ubicación de archivos según el layout ya existente; nunca una estructura paralela. Límite de 400
   líneas por archivo como restricción de diseño, no como detalle de formato.
@@ -179,6 +182,7 @@ Each stage is independently mergeable and verifiable.
 ### Stage 1 — <name>
 - **Changes:** <files to create/modify>
 - **Migration:** <versioned migration + non-breaking rollout, or "none">
+- **Migration command (run by the developer):** <exact repo command, e.g. `task migrate` — or "n/a">
 - **Verification:** <how to prove this stage works>
 
 ### Stage 2 — <name>

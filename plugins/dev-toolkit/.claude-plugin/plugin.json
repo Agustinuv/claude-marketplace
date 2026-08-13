@@ -1,7 +1,7 @@
 {
   "name": "dev-toolkit",
   "displayName": "Dev Toolkit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Development activity skills, named by area: planning a large feature before coding, backend/frontend contract handoffs, layered scaffolding, and auditing existing code against the team standard.",
   "author": {
     "name": "IMFD",
