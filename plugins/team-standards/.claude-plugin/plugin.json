@@ -1,7 +1,7 @@
 {
   "name": "team-standards",
   "displayName": "Team Standards",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Owns the IMFD team's engineering standard and its enforcement. Injects the standard into every session via a SessionStart hook (context/team-standards.md), keeps per-stack detail in references/ for skills to read on demand, and installs the mechanical pre-commit checks with the setup-standards-lint skill.",
   "author": {
     "name": "IMFD",
